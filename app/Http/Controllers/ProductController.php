@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -64,9 +65,15 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(UpdateProductRequest $request, Product $product)
     {
-        //
+        $data = $request->validated();
+
+        $product->fill($data);
+        $product->slug = Str::slug($product->title);
+        $product->save();
+        /* REINDIRIZZO ALLA ROTTA INDEX, CON UN MESSAGGIO */
+        return Redirect::route('products.index');
     }
 
     /**
@@ -74,6 +81,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $product->delete();
+        return Redirect::route('products.index');
     }
 }

@@ -120,7 +120,7 @@ const submit = () => {
                                 <InputLabel for="price" value="PREZZO" />
 
                                 <TextInput id="price" type="number" class="mt-1" v-model="form.price" autofocus
-                                    autocomplete="price" />
+                                    autocomplete="price" step=".01" />
                                 <InputError class="mt-2" :message="form.errors.price" />
                             </div>
 

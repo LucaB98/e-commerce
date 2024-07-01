@@ -24,6 +24,22 @@ const form = useForm({
     price: null,
 });
 
+const generateSlug = (form) => {
+    form.slug = form.title.trim().toLowerCase().split(' ').join('-');
+    return form.slug;
+
+};
+
+const preview = (form) => {
+
+    let preview = form.image;
+    if (!form.image) {
+        preview = 'https://marcolanci.it/boolean/assets/placeholder.png'
+    }
+    return preview;
+
+};
+
 /* INVIO MODULO IN POST, CORRISPONDENTE ALLA ROTTA DEFINITA SU WEB.PHP (STORE) */
 const submit = () => {
     form.post(route('products.store'));
@@ -67,24 +83,35 @@ const submit = () => {
                             </div>
                             <div class="w-1/2">
 
-                                <InputLabel for="slug" value="SLUG" />
+                                <InputLabel for="slug" value="SLUG" disabled />
 
-                                <TextInput id="slug" type="text" class="mt-1 w-full " v-model="form.slug" autofocus
-                                    autocomplete="slug" />
+                                <TextInput id="slug" type="text" :value="generateSlug(form)"
+                                    class="mt-1 w-full bg-gray-200 " v-model="form.slug" autofocus autocomplete="slug"
+                                    disabled />
 
                                 <InputError class="mt-2" :message="form.errors.slug" />
                             </div>
                         </div>
 
+                        <div class="flex gap-5 mt-5 items-center">
 
-                        <!-- URL PROGETTO -->
-                        <div class="mt-3">
-                            <InputLabel for="image" value="IMMAGINE" />
+                            <!-- URL PROGETTO -->
+                            <div class=" w-1/2">
+                                <InputLabel for="image" value="IMMAGINE" />
 
-                            <TextInput id="image" type="url" class="mt-1 block w-full" v-model="form.image"
-                                autocomplete="projecturl" />
+                                <TextInput id="image" type="url" class="mt-1 block w-full" v-model="form.image"
+                                    autocomplete="projecturl" />
 
-                            <InputError class="mt-2" :message="form.errors.image" />
+                                <InputError class="mt-2" :message="form.errors.image" />
+                            </div>
+
+                            <div class=" w-1/2">
+                                <InputLabel for="preview" />
+
+                                <img width="100px" height="100px" :src="preview(form)" alt="">
+
+                                <InputError class="mt-2" />
+                            </div>
                         </div>
 
                         <!-- descrizione -->
@@ -106,7 +133,7 @@ const submit = () => {
                                 <InputLabel for="price" value="PREZZO" />
 
                                 <TextInput id="price" type="number" class="mt-1" v-model="form.price" autofocus
-                                    autocomplete="price" />
+                                    autocomplete="price" step=".01" />
                                 <InputError class="mt-2" :message="form.errors.price" />
                             </div>
 
